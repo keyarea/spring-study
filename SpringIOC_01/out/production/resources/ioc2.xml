@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd"
+>
+    <bean id="car01" class="net.qipo.springIOC_01.Car">
+        <property name="carName" value="宝马">
+        </property>
+        <property name="color" value="绿色"></property>
+        <property name="price" value="30000"></property>
+    </bean>
+    <!-- 正确的为各种属性赋值   -->
+    <!--  测试使用null值,没有初始化,默认就是null,但是初始化了,如果让它变为null值,比如name属性  -->
+    <bean id="person01" class="net.qipo.springIOC_01.Person">
+        <property name="name">
+            <!--  进行复杂的赋值           -->
+            <null/>
+        </property>
+        <!-- ref:代表引用外面的一个值; car = ioc.getBean("car01");引用其他bean; -->
+        <property name="car" ref="car01"></property>
+    </bean>
+
+
+    <bean id="person02" class="net.qipo.springIOC_01.Person">
+        <property name="car">
+            <!-- 对象我们可以使用bean标签创建 car = new Car();引用内部bean; -->
+            <!-- 内部的bean不能被获取到,只能内部使用 -->
+            <bean class="net.qipo.springIOC_01.Car">
+                <property name="carName" value="自行车"></property>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="book01" class="net.qipo.springIOC_01.Book">
+        <property name="bookName" value="水浒转"></property>
+    </bean>
+
+    <bean id="person03" class="net.qipo.springIOC_01.Person">
+        <!-- 如何为List属性赋值 -->
+        <property name="books">
+            <!-- books = new ArrayList<Book>(); -->
+            <list>
+                <!-- list标签中添加每一个元素 -->
+                <bean class="net.qipo.springIOC_01.Book" p:bookName="西游记">
+
+                </bean>
+                <!-- 引用外部一个元素 -->
+                <ref bean="book01"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="person04" class="net.qipo.springIOC_01.Person">
+        <!-- maps = new LinkedHashMap<>(); -->
+        <property name="maps">
+            <map>
+                <!-- 一个entry代表一个键值对 -->
+                <entry key="key01" value="张三"></entry>
+                <entry key="key02" value="18"></entry>
+                <entry key="key03" value-ref="book01"></entry>
+                <entry key="key04" >
+                    <bean class="net.qipo.springIOC_01.Car">
+                        <property name="carName" value="奔驰"></property>
+                    </bean>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="person05" class="net.qipo.springIOC_01.Person">
+        <property name="properties">
+            <!-- properties = new Properties();-->
+            <props>
+                <!-- k=v都是string;值直接写在标签体中 -->
+                <prop key="username">root</prop>
+                <prop key="password">234</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- util名称空间创建集合类型的bean,方便别人引用 -->
+    <!-- 相当于 new LinkedHashMap<>() -->
+    <util:map id="myMap">
+        <!-- 添加元素-->
+        <!-- 一个entry代表一个键值对 -->
+        <entry key="key01" value="张三"></entry>
+        <entry key="key02" value="18"></entry>
+        <entry key="key03" value-ref="book01"></entry>
+        <entry key="key04" >
+            <bean class="net.qipo.springIOC_01.Car">
+                <property name="carName" value="奔驰"></property>
+            </bean>
+        </entry>
+    </util:map>
+
+    <bean id="person06" class="net.qipo.springIOC_01.Person">
+        <property name="maps" ref="myMap">
+        </property>
+    </bean>
+
+    <!-- 级联属性赋值: 级联属性:属性的属性-->
+    <bean id="person07" class="net.qipo.springIOC_01.Person">
+        <!-- 给car赋值的时候,该变car的价格-->
+        <property name="car" ref="car01"></property>
+        <!-- 级联属性可以修改属性的属性,注意原来的bean可能会被修改 -->
+        <property name="car.price" value="900000"></property>
+    </bean>
+
+    <!-- 通过继承实现bean配置信息的重用 -->
+    <!-- 通过abstract属性创建一个模板bean -->
+    <!-- abstract="true": 这个bean的配置是一个抽象的，不能获取他的实例，只能别人继承它 -->
+    <bean id="person08" class="net.qipo.springIOC_01.Person" abstract="true">
+        <property name="name" value="张三"></property>
+        <property name="age" value="18"></property>
+        <property name="email" value="zhangsan@qipo.net"></property>
+        <property name="gender" value="男"></property>
+    </bean>
+
+    <!-- perent: 指定当前的bean的配置信息继承于哪个 -->
+    <bean id="person09" class="net.qipo.springIOC_01.Person" parent="person08">
+        <property name="name" value="李四"></property>
+    </bean>
+
+
+
+</beans>

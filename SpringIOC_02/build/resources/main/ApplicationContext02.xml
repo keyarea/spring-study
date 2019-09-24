@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+    <!-- 引用外部属性文件-->
+    <!-- 数据库连接池作为单实例是最好的,一个项目就一个连接池,连接池中管理很多连接. 连接直接从连接池中拿-->
+    <!-- 可以让Spring帮我们创建连接池对象,(管理连接池) -->
+
+    <!-- 名称空间: context -->
+    <!-- 加载外部配置文件的 固定写法 classpath: 表示引用类路径下的一个资源-->
+    <context:property-placeholder location="classpath:dbconfig.properties"/>
+
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <!-- -->
+        <!-- ${key} 动态取出配置文件中某个key对应的值 -->
+        <property name="user" value="${username}"></property>
+        <property name="password" value="${password}"></property>
+        <property name="jdbcUrl" value="${jdbcUrl}"></property>
+        <property name="driverClass" value="${driverClass}"></property>
+    </bean>
+
+    <bean id="book" class="net.qipo.bean.Book">
+        <property name="bookName" value="${username}">
+        </property>
+    </bean>
+
+    <!--
+       为Person里面自定义的属性赋值
+       property: 手动赋值
+       自动赋值(自动装配)
+       自动装配 (仅限于自定义属性)
+       autowire="default/no"  ,不自动装配, 不会自动为book赋值
+
+       按照某种规则自动装配
+       autowire="byName": 按照名字
+           - private Book book; 以属性名为id,去容器中找到这个组价,给他赋值;如果找不到自动装配null
+       autowire="byType":
+           - private Book book; 以属性的类型作为查找依据去容器中找到这个组件; 如果这个容器中有多个这个类的组件就会报错; 没有找到就会自动赋值null;
+           - 如果有List,就会封装所有该类赋值给属性
+       autowire="constructor": 按照构造器进行赋值
+           - 先按照有参构造的类型进行装配, 没有就直接为组件装配null
+           - 如果按照类型找到了多个,参数的名作为id继续匹配;找到就装配,找不到就装配null
+           - 不会报错
+     -->
+    <bean id="person" class="net.qipo.bean.Person" autowire="byName">
+    </bean>
+
+    <!-- SpEl测试 (Spring Expression Language) Spring表达式语言-->
+    <!--
+        - 运算符都支持
+        - 使用字面量
+     -->
+    <bean id="person01" class="net.qipo.bean.Person">
+        <!-- 字面量: ${}, #{} -->
+        <property name="age" value="#{19+6}">
+        </property>
+        <!-- 引用其他bean的某个属性值 -->
+        <property name="name" value="#{book.bookName}">
+        </property>
+        <!-- 引用其他bean -->
+        <property name="book" value="#{book}">
+        </property>
+
+        <!-- 调用静态方法: #{T(全类名).静态方法名()} -->
+        <property name="email" value="#{T(java.util.UUID).randomUUID().toString()}">
+        </property>
+
+        <!-- 调用非静态方法 -->
+        <property name="gender" value="#{book.getBookName()}">
+        </property>
+    </bean>
+</beans>

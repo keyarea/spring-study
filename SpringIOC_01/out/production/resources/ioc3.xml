@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--原来的创建顺序是按照配置的顺序 -->
+    <!-- 改变bean的创建顺序 -->
+    <!-- bean之间的依赖 （只是改变创建顺序）-->
+    <bean id="person" class="net.qipo.springIOC_01.Person" depends-on="book,car"></bean>
+    <bean id="car" class="net.qipo.springIOC_01.Car"></bean>
+    <bean id="book" class="net.qipo.springIOC_01.Book"></bean>
+
+</beans>

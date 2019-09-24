@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.qipo.bean.ApplicationContextTest01" tests="1" skipped="0" failures="0" errors="0" timestamp="2019-09-20T07:43:39" hostname="DESKTOP-G6OD6TJ" time="0.002">
+  <properties/>
+  <testcase name="test04" classname="net.qipo.bean.ApplicationContextTest01" time="0.002"/>
+  <system-out><![CDATA[Book Construct...
+Person{name='key', age=25, book=Book{bookName='key', author='null'}, email='495ffbc3-104a-4d20-8cfb-c92515c00673', gender='key'}
+]]></system-out>
+  <system-err><![CDATA[九月 20, 2019 3:43:39 下午 com.mchange.v2.log.MLog 
+信息: MLog clients using java 1.4+ standard logging.
+九月 20, 2019 3:43:39 下午 com.mchange.v2.c3p0.C3P0Registry 
+信息: Initializing c3p0-0.9.5.4 [built 23-March-2019 23:00:48 -0700; debug? true; trace: 10]
+]]></system-err>
+</testsuite>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+    <!-- 通过注解快速的分别创建Dao, Service, Controller（控制器，控制网站跳转逻辑的）
+         通过给bean添加某些注解，可以快速的将bean加入到ioc容器中去
+
+         某个类上添加上任何一个注解，都能快速的将bean加入到ioc容器的管理中
+         spring中给了4个注解：
+         @Controller : 控制器，我们推荐给控制器层(servlet)加这个注解
+         @Service: 业务逻辑： 我们推荐给业务逻辑层的组件添加这个注解
+         @Repository：给数据库层（持久化层，dao层）的组件添加这个注解
+         @Component：给不属于以上几层的组件添加这个注解；
+
+         注解可以随便加：Spring底层不会去验证你这个组件，是否如你所说就是一个dao层的或者就是一个servlet层的组件
+         我们推荐各自层加各自的组件
+
+         使用注解将组件快速的加入到容器中需要几步：
+         1） 给要添加的组件上标四个注解的任何一个
+         2) 告诉Spring，自动扫描这些加了注解的组件，依赖context名称空间
+         3) 导入aop包
+     -->
+    <!-- context:component-scan: 自动组件扫描 -->
+    <!-- base-package: 指定扫描的基础包 ，把基础包及它下面所有的包的所有加了注解的类，自动扫描进ioc容器中   -->
+    <context:component-scan base-package="net.qipo">
+    </context:component-scan>
+
+</beans>

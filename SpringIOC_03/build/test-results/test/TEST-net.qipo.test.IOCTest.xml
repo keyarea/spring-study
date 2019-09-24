@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.qipo.test.IOCTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2019-09-21T01:31:05" hostname="DESKTOP-G6OD6TJ" time="0.004">
+  <properties/>
+  <testcase name="test01" classname="net.qipo.test.IOCTest" time="0.004"/>
+  <system-out><![CDATA[true
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

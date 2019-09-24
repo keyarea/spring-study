@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.qipo.test.AOPTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2019-09-24T12:28:58" hostname="DESKTOP-G6OD6TJ" time="0.014">
+  <properties/>
+  <testcase name="test01" classname="net.qipo.test.AOPTest" time="0.014"/>
+  <system-out><![CDATA[【xxx】方法开始执行了，用的参数列表【xxx】
+【xxx】方法结束了
+【xxx】方法正常执行完成了。他的计算结果是xxx
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
