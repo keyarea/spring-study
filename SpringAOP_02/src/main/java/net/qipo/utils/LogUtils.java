@@ -1,11 +1,11 @@
 package net.qipo.utils;
 
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Method;
 import java.util.Arrays;
 
 /**
@@ -38,11 +38,18 @@ public class LogUtils {
      * 通知方法是Spring利用反射调用的，每次方法调用得确认这个方法的参数列表的值；
      * 参数表上的每一个参数，Spring都得知道是什么？
      * 不知道的参数一定要告诉Spring这是什么？
+     *
+     * 抽取可重用的切入点表达式：
+     * 1、随便声明一个没有实现的返回void的空方法
+     * 2、给方法上标注@Pointcut
      */
+
+    @Pointcut("execution(public int net.qipo.impl.MyMathCalculator.*(int,int))")
+    public void MyPoint(){};
 
     // 想在目标方法运行之前运行，写切入点表达式
     // execution(访问权限符 返回值类型 方法签名)
-    @Before("execution(public int net.qipo.impl.MyMathCalculator.*(int,int))")
+    @Before("MyPoint()")
     public static  void logStart(JoinPoint joinPoint) {
         // 获取到目标方法运行时使用的参数
         Object[] args = joinPoint.getArgs();
@@ -58,7 +65,7 @@ public class LogUtils {
     /**
      * 告诉Spring这个result用来接收返回值 returning="result"
      */
-    @AfterReturning(value = "execution(public int net.qipo.impl.MyMathCalculator.*(int,int))", returning = "result")
+    @AfterReturning(value = "MyPoint()", returning = "result")
     public static void logReturn(JoinPoint joinPoint, Object result) {
         Signature signature = joinPoint.getSignature();
         String name = signature.getName();
@@ -69,7 +76,7 @@ public class LogUtils {
      * 告诉Spring这个exception是用来接受异常的 throwing="exception"
      */
     // 想在目标方法出现异常的时候执行
-    @AfterThrowing(value = "execution(public int net.qipo.impl.MyMathCalculator.*(int,int))", throwing = "exception")
+    @AfterThrowing(value = "MyPoint()", throwing = "exception")
     public static void logException(JoinPoint joinPoint, Exception exception) {
         Signature signature = joinPoint.getSignature();
         String name = signature.getName();
@@ -77,10 +84,53 @@ public class LogUtils {
     }
 
     // 想在目标方法结束的时候执行
-    @After("execution(public int net.qipo.impl.MyMathCalculator.*(int,int))")
+    @After("MyPoint()")
     public static void logEnd(JoinPoint joinPoint) {
         Signature signature = joinPoint.getSignature();
         String name = signature.getName();
         System.out.println("【"+ name +"】方法结束了");
+    }
+
+    /**
+     * 环绕通知：@Around 是Spring中最强大的通知；
+     * 动态代理
+     * try｛
+     *         @Before
+     *         method.invoke(obj, args);
+     *         @AfterReturning
+     *    }catch(Exception e) {
+     *         @AfterThrowing
+     *     }finally{
+     *         @After
+     *   }
+     * 四合一就是环绕通知
+     *
+     * 环绕通知是
+     */
+    @Around("MyPoint()")
+    public Object myAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+        // 参数
+        Object[] args = proceedingJoinPoint.getArgs();
+        // 方法名
+        String name = proceedingJoinPoint.getSignature().getName();
+        Object proceed = null;
+        try {
+            // 就是利用反射调用目标方法即可, 就是反射中的method.invoke(obj,args);
+            // @Before
+            System.out.println("【环绕的前置通知】" + name + "方法开始执行");
+            proceed = proceedingJoinPoint.proceed(args);
+            // @AfterReturning
+            System.out.println("【环绕的返回通知】" + name + "方法返回，返回值" + proceed);
+        }catch (Exception e) {
+            // @AfterThrowing
+            System.out.println("【环绕的异常通知】"+ name + "方法异常，异常信息" + e);
+//            e.printStackTrace();
+        }finally {
+            // @After
+            System.out.println("【环绕的后置通知】" + name + "方法结束");
+        }
+
+        // 反射调用后的返回值也一定要返回出去
+        return proceed;
     }
 }
