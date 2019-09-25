@@ -33,7 +33,7 @@ public class AOPTest {
 
         MyMathCalculator bean = context.getBean(MyMathCalculator.class);
         bean.div(1, 2);
-//        bean.div(1, 0);
+        bean.div(1, 0);
 
     }
 }

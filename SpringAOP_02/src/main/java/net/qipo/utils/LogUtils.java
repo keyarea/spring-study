@@ -4,15 +4,20 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.*;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
 /**
  * 如何将这个类(切面类)中的这些方法（通知方法）动态的在目标方法的各个位置切入
+ *
+ * 多切面的顺序默认是按照切面函数的首字母顺序来排序的
+ * 多切面时@Order可以改变切面顺序,数值越小优先级越高
  */
 @Aspect
 @Component
+@Order(1)
 public class LogUtils {
 
     /**
@@ -105,7 +110,19 @@ public class LogUtils {
      *   }
      * 四合一就是环绕通知
      *
-     * 环绕通知是
+     * 环绕通知中有一个参数: ProceedingJoinPoint
+     * 环绕通知要优先于普通方法执行
+     *
+     * [普通前置方法]
+     * {   环绕前置方法
+     *     环绕执行目标方法
+     *     环绕返回方法/异常
+     *     环绕后置方法
+     * }
+     * [普通后置方法]
+     * [普通返回方法\普通异常方法]
+     *
+     * 新的顺序: 环绕前置-->普通前置--->目标方法执行--->环绕正常返回/出现异常--->环绕后置--->普通后置--->普通返回或者后置
      */
     @Around("MyPoint()")
     public Object myAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
@@ -124,7 +141,8 @@ public class LogUtils {
         }catch (Exception e) {
             // @AfterThrowing
             System.out.println("【环绕的异常通知】"+ name + "方法异常，异常信息" + e);
-//            e.printStackTrace();
+            // 为了能让外界感知到这个异常,这个异常一定要抛出去
+            throw new RuntimeException(e);
         }finally {
             // @After
             System.out.println("【环绕的后置通知】" + name + "方法结束");
