@@ -14,14 +14,24 @@
        4、开启基于注解的AOP功能
      -->
 
+    <!--
+       注解,方便快捷
+       配置,功能完善,重要的用配置,不重要的用注解;
+     -->
+
     <!-- 基于配置的AOP -->
     <bean class="net.qipo.impl.MyMathCalculator" id="myMathCalculator"> </bean>
     <bean class="net.qipo.utils.LogUtils" id="logUtils"></bean>
 
     <!-- 需要aop名称空间 -->
     <aop:config>
-        <!-- 指定切面, @Aspect -->
-        <aop:aspect ref="logUtils">
+        <!-- 配置全局的切面表达式 -->
+        <aop:pointcut id="globalPointcut" expression="execution(* net.qipo.impl.MyMathCalculator.*(..)))" />
+        <!-- 指定切面, @Aspect
+             order可以配置顺序
+         -->
+        <aop:aspect ref="logUtils" order="1">
+            <!-- 当前切面能用的 -->
             <aop:pointcut id="myPointcut" expression="execution(* net.qipo.impl.MyMathCalculator.*(..))"/>
             
             <!-- 配置哪个方法是前置通知 -->
@@ -29,7 +39,8 @@
             <aop:before method="logStart" pointcut-ref="myPointcut"/>
             <aop:after-returning method="logReturn" pointcut-ref="myPointcut" returning="result"/>
             <aop:after-throwing method="logException" pointcut-ref="myPointcut" throwing="exception"/>
-
+            <aop:after method="logEnd" pointcut-ref="myPointcut"/>
+            <aop:around method="myAround" pointcut-ref="myPointcut"/>
         </aop:aspect>
     </aop:config>
 

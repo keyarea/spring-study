@@ -29,7 +29,7 @@
             <aop:before method="logStart" pointcut-ref="myPointcut"/>
             <aop:after-returning method="logReturn" pointcut-ref="myPointcut" returning="result"/>
             <aop:after-throwing method="logException" pointcut-ref="myPointcut" throwing="exception"/>
-
+            <aop:after method="logEnd" pointcut-ref="myPointcut"/>
         </aop:aspect>
     </aop:config>
 
