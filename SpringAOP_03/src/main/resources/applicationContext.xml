@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+    <!--
+       基于注解的AOP步骤
+       1、将目标类和切面类都加入到ioc容器中
+       2、告诉Spring哪个是切面类。@Aspect
+       3、在切面类中使用5个通知注解来配置切面中的这些通知方法都何时何地运行
+       4、开启基于注解的AOP功能
+     -->
+
+    <!-- 基于配置的AOP -->
+    <bean class="net.qipo.impl.MyMathCalculator" id="myMathCalculator"> </bean>
+    <bean class="net.qipo.utils.LogUtils" id="logUtils"></bean>
+
+    <!-- 需要aop名称空间 -->
+    <aop:config>
+        <!-- 指定切面, @Aspect -->
+        <aop:aspect ref="logUtils">
+            <aop:pointcut id="myPointcut" expression="execution(* net.qipo.impl.MyMathCalculator.*(..))"/>
+            
+            <!-- 配置哪个方法是前置通知 -->
+<!--            <aop:before method="logStart" pointcut="execution(* net.qipo.impl.MyMathCalculator.*(..))"/>-->
+            <aop:before method="logStart" pointcut-ref="myPointcut"/>
+            <aop:after-returning method="logReturn" pointcut-ref="myPointcut" returning="result"/>
+            <aop:after-throwing method="logException" pointcut-ref="myPointcut" throwing="exception"/>
+
+        </aop:aspect>
+    </aop:config>
+
+</beans>
