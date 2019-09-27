@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- 引入外部配置文件 -->
+    <context:property-placeholder  location="dbConfig.properties"></context:property-placeholder>
+
+    <!-- 测试数据源 -->
+    <!-- ${}配置文件中的值
+         #{}Spring中的表达式语言
+     -->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="user" value="${jdbc.user}"/>
+        <property name="password" value="${jdbc.password}" />
+        <property name="jdbcUrl" value="${jdbc.jdbcUrl}" />
+        <property name="driverClass" value="${jdbc.driverClass}" />
+    </bean>
+
+    <!-- Spring提供了一个类JdbcTemplate，我们用它来操作数据库：导入Spring的数据库模块
+      spring-jdbc spring-orm spring-tx
+     -->
+    <bean class="org.springframework.jdbc.core.JdbcTemplate" id="jdbcTemplate">
+        <constructor-arg name="dataSource" ref="dataSource"></constructor-arg>
+    </bean>
+
+
+</beans>

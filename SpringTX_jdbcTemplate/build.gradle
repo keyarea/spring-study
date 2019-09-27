@@ -1,0 +1,45 @@
+plugins {
+    id 'java'
+}
+
+group 'net.qipo.SpringTX_jdbcTemplate'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    // https://mvnrepository.com/artifact/org.springframework/spring-core
+    compile group: 'org.springframework', name: 'spring-core', version: '5.1.9.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework/spring-context
+    compile group: 'org.springframework', name: 'spring-context', version: '5.1.9.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework/spring-beans
+    compile group: 'org.springframework', name: 'spring-beans', version: '5.1.9.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework/spring-expression
+    compile group: 'org.springframework', name: 'spring-expression', version: '5.1.9.RELEASE'
+    // https://mvnrepository.com/artifact/commons-logging/commons-logging
+    compile group: 'commons-logging', name: 'commons-logging', version: '1.2'
+    // https://mvnrepository.com/artifact/org.springframework/spring-aspects
+    compile group: 'org.springframework', name: 'spring-aspects', version: '5.1.9.RELEASE'
+    // https://mvnrepository.com/artifact/cglib/cglib-nodep
+    compile group: 'cglib', name: 'cglib-nodep', version: '3.3.0'
+    // https://mvnrepository.com/artifact/aopalliance/aopalliance
+    compile group: 'aopalliance', name: 'aopalliance', version: '1.0'
+    // https://mvnrepository.com/artifact/org.aspectj/aspectjweaver
+    compile group: 'org.aspectj', name: 'aspectjweaver', version: '1.9.4'
+    // https://mvnrepository.com/artifact/com.mchange/c3p0
+    compile group: 'com.mchange', name: 'c3p0', version: '0.9.5.4'
+    // https://mvnrepository.com/artifact/mysql/mysql-connector-java
+    compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.48'
+    // https://mvnrepository.com/artifact/org.springframework/spring-jdbc
+    compile group: 'org.springframework', name: 'spring-jdbc', version: '5.1.9.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework/spring-orm
+    compile group: 'org.springframework', name: 'spring-orm', version: '5.1.9.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework/spring-tx
+    compile group: 'org.springframework', name: 'spring-tx', version: '5.1.9.RELEASE'
+
+}
