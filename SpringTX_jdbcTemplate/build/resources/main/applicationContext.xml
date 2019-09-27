@@ -25,5 +25,10 @@
         <constructor-arg name="dataSource" ref="dataSource"></constructor-arg>
     </bean>
 
+    <!-- 配置一个具有具名参数的JDBCTemplate   -->
+    <bean class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate" id="namedParameterJdbcTemplate">
+        <constructor-arg name="dataSource" ref="dataSource"/>
+    </bean>
+
 
 </beans>

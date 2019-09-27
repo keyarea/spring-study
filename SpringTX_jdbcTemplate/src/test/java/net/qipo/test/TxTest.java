@@ -1,22 +1,28 @@
 package net.qipo.test;
 
 import net.qipo.bean.User;
+import net.qipo.dao.UserDao;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TxTest {
 
     private ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
     private JdbcTemplate jdbcTemplate = context.getBean(JdbcTemplate.class);
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate = context.getBean(NamedParameterJdbcTemplate.class);
 
     @Test
     public void test01() throws SQLException {
@@ -112,4 +118,49 @@ public class TxTest {
         System.out.println(aDouble);
     }
 
+    /**
+     * 使用带有具名参数的SQL语句插入一条员工记录,并以Map形式传入参数
+     *
+     * 具名参数: 具有名字的参数,参数不是占位符了,而是一个变量名  语法格式:   :参数名
+     *
+     * Spring有一个支持具名参数的JdbcTemplate
+     * 占位符参数: ?的顺序千万不能错
+     * */
+    @Test
+    public void test08() {
+        String sql = "INSERT INTO user (  name, age ) VALUES (:name, :age);";
+
+        // Map
+        Map<String, Object> map = new HashMap<>();
+        // 将所有具有具名参数的值都放在map中
+        map.put("name", "王静");
+        map.put("age", 29);
+        int update = namedParameterJdbcTemplate.update(sql, map);
+        System.out.println(update);
+    }
+
+    /**
+     * 以SqlParameterSource形式传入参数
+     */
+    @Test
+    public void test09() {
+        String sql = "INSERT INTO user (  name, age ) VALUES (:name, :age);";
+        User user = new User();
+        user.setName("哈哈哈");
+        user.setAge(12);
+        int update = namedParameterJdbcTemplate.update(sql, new BeanPropertySqlParameterSource(user));
+        System.out.println(update);
+    }
+
+    /**
+     * 创建UserDao,自动装配了JdbcTemplate对象
+     */
+    @Test
+    public void test10() {
+        UserDao bean = context.getBean(UserDao.class);
+        User user = new User();
+        user.setName("王五");
+        user.setAge(12);
+        bean.save(user);
+    }
 }
